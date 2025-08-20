@@ -75,3 +75,160 @@ L .-..
 O ---
 
 
+Got it 👍
+I’ll explain the code step by step in simple terms so you clearly understand **how it works**:
+
+---
+
+## 🔹 Overview
+
+The code allows your Arduino to act as a **Morse code encoder and decoder**.
+
+* **Encoder**: If you type text in the Serial Monitor, Arduino outputs the corresponding Morse code using LED + buzzer.
+* **Decoder**: If you press a button with short (dot) or long (dash) presses, Arduino figures out what you meant and prints the decoded text in Serial Monitor.
+
+---
+
+## 🔹 Important Variables
+
+```cpp
+int tonePin = 2;       // Pin connected to buzzer/speaker
+int toneFreq = 1000;   // Buzzer sound frequency (Hz)
+int ledPin = 13;       // Pin connected to LED
+int buttonPin = 8;     // Button input pin
+int dotLength = 240;   // Basic Morse timing unit (ms) → ~5 words/minute
+```
+
+From `dotLength`, the program calculates:
+
+* `dashLength = dotLength * 3`
+* `letterSpace = dotLength * 3`
+* `wordSpace = dotLength * 7`
+
+So dots, dashes, gaps between letters and words all follow Morse code timing.
+
+---
+
+## 🔹 Morse Code Storage
+
+The Morse patterns are stored in arrays:
+
+```cpp
+char* letters[] = { ".-", "-...", "-.-.", ... };   // A–Z
+char* numbers[] = { "-----", ".----", "..---", ... }; // 0–9
+```
+
+So:
+
+* `letters[0] = ".-"` → "A"
+* `letters[1] = "-..."` → "B"
+* `numbers[0] = "-----"` → "0"
+
+---
+
+## 🔹 setup()
+
+* Sets pin modes.
+* Starts Serial at `9600 baud`.
+* Prints welcome text and Morse speed.
+* Tests LED + buzzer.
+* Demonstrates Morse code for **A, B, C**.
+
+---
+
+## 🔹 loop()
+
+This is where the real action happens. Two modes:
+
+### 1️⃣ Serial Input → Encode to Morse
+
+```cpp
+if (Serial.available() > 0)
+```
+
+* Reads characters typed into Serial Monitor.
+* If it’s a letter:
+
+  * Converts to uppercase.
+  * Looks up its Morse code sequence from `letters[]`.
+  * Prints both text + Morse sequence in Serial.
+  * Flashes LED + buzzer to output Morse.
+* If it’s a number:
+
+  * Same process but using `numbers[]`.
+* If it’s a space:
+
+  * Adds a word gap.
+
+Example:
+Typing `C` → Arduino prints:
+
+```
+C -.-.
+```
+
+and LED + buzzer play `-.-.`
+
+---
+
+### 2️⃣ Button Input → Decode from Morse
+
+```cpp
+if (digitalRead(buttonPin) == LOW)
+```
+
+* Button press starts a timer (`t1`).
+* When released, timer stops (`t2`).
+* Press duration = `onTime = t2 - t1`.
+
+👉 Logic:
+
+* If `onTime` ≤ 1.5 × dot → **dot** (`.`)
+* Else → **dash** (`-`)
+
+Each dot/dash gets added to a sequence:
+`dashSeq = dashSeq + "."` or `dashSeq + "-"`
+
+---
+
+### 3️⃣ Detecting End of Letter/Word
+
+After button presses:
+
+* If the **gap** after release ≥ `letterSpace` → that’s the end of a letter.
+  → Compare `dashSeq` with stored `letters[]` and `numbers[]`.
+  → Print the matching character, or `?` if not found.
+
+* If the gap ≥ `wordSpace` → insert `_` (represents space between words).
+
+---
+
+## 🔹 Flash and Beep Functions
+
+These just control LED + buzzer for dots and dashes.
+
+```cpp
+void flashDotOrDash(char dotOrDash) {
+  digitalWrite(ledPin, HIGH);
+  tone(tonePin, toneFreq);
+  if (dotOrDash == '.') delay(dotLength);
+  else delay(dashLength);
+  digitalWrite(ledPin, LOW);
+  noTone(tonePin);
+  delay(dotLength); // gap between elements
+}
+```
+
+So each dot/dash is a **sound + LED blink** with correct timing.
+
+---
+
+## 🔹 In Short
+
+* **Keyboard input**: Text → Morse (LED + buzzer).
+* **Button input**: Morse (presses) → Text (Serial).
+* Uses **timing** to decide dot/dash and gaps.
+* Looks up patterns in arrays to encode/decode.
+
+---
+
