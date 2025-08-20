@@ -35,7 +35,7 @@ You can either:
 
 ---
 
-## 🔹 Important Variables
+## Important Variables
 
 ```cpp
 int tonePin = 2;       // Pin connected to buzzer/speaker
@@ -55,7 +55,7 @@ So dots, dashes, gaps between letters and words all follow Morse code timing.
 
 ---
 
-## 🔹 Morse Code Storage
+## Morse Code Storage
 
 The Morse patterns are stored in arrays:
 
@@ -72,7 +72,7 @@ So:
 
 ---
 
-## 🔹 setup()
+## setup()
 
 * Sets pin modes.
 * Starts Serial at `9600 baud`.
@@ -82,11 +82,11 @@ So:
 
 ---
 
-## 🔹 loop()
+## loop()
 
 This is where the real action happens. Two modes:
 
-### 1️⃣ Serial Input → Encode to Morse
+### Serial Input → Encode to Morse
 
 ```cpp
 if (Serial.available() > 0)
@@ -117,7 +117,7 @@ and LED + buzzer play `-.-.`
 
 ---
 
-### 2️⃣ Button Input → Decode from Morse
+### Button Input → Decode from Morse
 
 ```cpp
 if (digitalRead(buttonPin) == LOW)
@@ -127,7 +127,7 @@ if (digitalRead(buttonPin) == LOW)
 * When released, timer stops (`t2`).
 * Press duration = `onTime = t2 - t1`.
 
-👉 Logic:
+Logic:
 
 * If `onTime` ≤ 1.5 × dot → **dot** (`.`)
 * Else → **dash** (`-`)
@@ -137,7 +137,7 @@ Each dot/dash gets added to a sequence:
 
 ---
 
-### 3️⃣ Detecting End of Letter/Word
+### Detecting End of Letter/Word
 
 After button presses:
 
@@ -149,7 +149,7 @@ After button presses:
 
 ---
 
-## 🔹 Flash and Beep Functions
+## Flash and Beep Functions
 
 These just control LED + buzzer for dots and dashes.
 
@@ -169,7 +169,7 @@ So each dot/dash is a **sound + LED blink** with correct timing.
 
 ---
 
-## 🔹 In Short
+## In Short
 
 * **Keyboard input**: Text → Morse (LED + buzzer).
 * **Button input**: Morse (presses) → Text (Serial).
