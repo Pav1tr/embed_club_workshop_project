@@ -35,60 +35,6 @@ You can either:
 
 ---
 
-## Code Details
-- `dotLength` defines Morse speed. Default is `240ms` (≈ 5 WPM).  
-  - Formula: `WPM = 1200 / dotLength`
-- Dot (`.`) = 1 × `dotLength`  
-- Dash (`-`) = 3 × `dotLength`  
-- Letter space = 3 × `dotLength`  
-- Word space = 7 × `dotLength`
-
-When typing text in Serial Monitor:
-- Letters/numbers are flashed and beeped as Morse.
-- Spaces insert word breaks.
-
-When using the button:
-- Short press → dot (`.`)  
-- Long press → dash (`-`)  
-- Short gap between presses → continues same letter.  
-- Longer gap → ends letter.  
-- Very long gap → ends word.  
-
----
-
-## How to Use
-1. **Build the circuit** as described above.
-2. Upload the provided sketch to Arduino.
-3. Open **Serial Monitor** (baud rate: `9600`).
-4. Options:
-   - **Type text** → Arduino flashes and beeps Morse.
-   - **Press the button** → Arduino decodes Morse into text.
-
----
-
-## Example
-- Type `HELLO` in Serial Monitor → LED and buzzer output:
-H ....
-E .
-L .-..
-L .-..
-O ---
-
-
-Got it 👍
-I’ll explain the code step by step in simple terms so you clearly understand **how it works**:
-
----
-
-## 🔹 Overview
-
-The code allows your Arduino to act as a **Morse code encoder and decoder**.
-
-* **Encoder**: If you type text in the Serial Monitor, Arduino outputs the corresponding Morse code using LED + buzzer.
-* **Decoder**: If you press a button with short (dot) or long (dash) presses, Arduino figures out what you meant and prints the decoded text in Serial Monitor.
-
----
-
 ## 🔹 Important Variables
 
 ```cpp
@@ -231,4 +177,25 @@ So each dot/dash is a **sound + LED blink** with correct timing.
 * Looks up patterns in arrays to encode/decode.
 
 ---
+
+## How to Use
+1. **Build the circuit** as described above.
+2. Upload the provided sketch to Arduino.
+3. Open **Serial Monitor** (baud rate: `9600`).
+4. Options:
+   - **Type text** → Arduino flashes and beeps Morse.
+   - **Press the button** → Arduino decodes Morse into text.
+
+---
+
+## Example
+- Type `HELLO` in Serial Monitor → LED and buzzer output:
+H ....
+E .
+L .-..
+L .-..
+O ---
+
+
+
 
